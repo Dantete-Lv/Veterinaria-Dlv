@@ -1,10 +1,10 @@
-package com.vetSystem.vet_system.Service;
+package com.vetSystem.vet_system.service;
 
-import com.vetSystem.vet_system.Exception.ResourceNotFoundException;
-import com.vetSystem.vet_system.Entity.Duenio;
-import com.vetSystem.vet_system.Entity.Mascota;
-import com.vetSystem.vet_system.Repository.DuenioRepository;
-import com.vetSystem.vet_system.Repository.MascotaRepository;
+import com.vetSystem.vet_system.exception.ResourceNotFoundException;
+import com.vetSystem.vet_system.entity.Duenio;
+import com.vetSystem.vet_system.entity.Mascota;
+import com.vetSystem.vet_system.repository.DuenioRepository;
+import com.vetSystem.vet_system.repository.MascotaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

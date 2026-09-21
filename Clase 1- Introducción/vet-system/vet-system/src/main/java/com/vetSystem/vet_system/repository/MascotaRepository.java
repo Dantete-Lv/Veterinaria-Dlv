@@ -1,6 +1,6 @@
-package com.vetSystem.vet_system.Repository;
+package com.vetSystem.vet_system.repository;
 
-import com.vetSystem.vet_system.Entity.Mascota;
+import com.vetSystem.vet_system.entity.Mascota;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

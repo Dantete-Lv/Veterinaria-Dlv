@@ -1,4 +1,4 @@
-package com.vetSystem.vet_system.Entity;
+package com.vetSystem.vet_system.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

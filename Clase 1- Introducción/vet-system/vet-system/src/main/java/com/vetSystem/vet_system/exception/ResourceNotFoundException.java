@@ -1,4 +1,4 @@
-package com.vetSystem.vet_system.Exception;
+package com.vetSystem.vet_system.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String recurso, Long id) {
