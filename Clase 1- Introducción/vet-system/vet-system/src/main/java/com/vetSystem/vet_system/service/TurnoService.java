@@ -46,11 +46,8 @@ public class TurnoService {
         Mascota mascota = mascotaRepository.findById(request.getMascotaId()).orElseThrow(() -> new ResourceNotFoundException("Mascota", request.getMascotaId()));
         Veterinario veterinario =
                 veterinarioRepository.findById(request.getVeterinarioId()).orElseThrow(() -> new ResourceNotFoundException("Veterinario", request.getVeterinarioId()));
-        if (turnoRepository.existsByVeterinarioIdAndFechaAndHora(
-                request.getVeterinarioId(), request.getFecha(),
-                request.getHora())) {
-            throw new TurnoSuperpuestoException("El veterinario ya tiene un turno en ese horario"
-            );
+        if (turnoRepository.existsByVeterinarioIdAndFechaAndHora(request.getVeterinarioId(), request.getFecha(), request.getHora())) {
+            throw new TurnoSuperpuestoException("El veterinario ya tiene un turno en ese horario");
         }
         Turno turno = new Turno();
         turno.setFecha(request.getFecha());
@@ -61,6 +58,7 @@ public class TurnoService {
         turno.setVeterinario(veterinario);
         return turnoMapper.toDTO(turnoRepository.save(turno));
     }
+
     @Transactional
     public TurnoResponseDTO actualizarEstado(Long id, EstadoTurno nuevoEstado, String observaciones) {
         Turno turno = turnoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Turno", id));

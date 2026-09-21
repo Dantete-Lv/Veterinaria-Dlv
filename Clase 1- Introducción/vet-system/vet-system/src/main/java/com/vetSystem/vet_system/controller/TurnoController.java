@@ -4,6 +4,10 @@ import com.vetSystem.vet_system.dto.TurnoRequestDTO;
 import com.vetSystem.vet_system.dto.TurnoResponseDTO;
 import com.vetSystem.vet_system.entity.EstadoTurno;
 import com.vetSystem.vet_system.service.TurnoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,62 +20,55 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/turnos")
 @RequiredArgsConstructor
+@Tag(name = "Turnos", description = "Operaciones relacionadas con los turnos de la clínica veterinaria")
 public class TurnoController {
 
     private final TurnoService turnoService;
 
     @GetMapping
+    @Operation(summary = "Listar turnos", description = "Obtiene la lista completa de turnos registrados.")
+    @ApiResponse(responseCode = "200", description = "Lista de turnos obtenida correctamente")
     public ResponseEntity<List<TurnoResponseDTO>> getAllTurnos() {
-        return ResponseEntity.ok(
-                turnoService.getAllTurnos()
-        );
+        return ResponseEntity.ok(turnoService.getAllTurnos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TurnoResponseDTO> getTurnoById(
-            @PathVariable Long id) {
+    @Operation(summary = "Obtener turno por ID", description = "Busca un turno específico mediante su identificador.")
+    @ApiResponse(responseCode = "200", description = "Turno encontrado correctamente")
+    @ApiResponse(responseCode = "404", description = "No se encontró un turno con el ID indicado")
+    public ResponseEntity<TurnoResponseDTO> getTurnoById(@Parameter(description = "ID del turno", example = "1")@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                turnoService.getTurnoById(id)
+        return ResponseEntity.ok(turnoService.getTurnoById(id)
         );
     }
 
     @GetMapping("/agenda")
-    public ResponseEntity<List<TurnoResponseDTO>> getAgenda(
-            @RequestParam Long veterinarioId,
-            @RequestParam LocalDate fecha) {
-
-        return ResponseEntity.ok(
-                turnoService.getTurnosByVeterinarioYFecha(
-                        veterinarioId,
-                        fecha
-                )
-        );
+    @Operation(summary = "Obtener agenda por ID de veterinario", description = "Busca una agenda específica mediante el identificador de un veterinario.")
+    @ApiResponse(responseCode = "200", description = "agenda obtenida correctamente")
+    @ApiResponse(responseCode = "404", description = "No se encontró información para el veterinario y fecha indicados")
+    public ResponseEntity<List<TurnoResponseDTO>> getAgenda(@Parameter(description = "ID del veterinario", example = "1") @RequestParam Long veterinarioId, @Parameter(description = "Fecha de la agenda", example = "2026-09-25") @RequestParam LocalDate fecha) {
+        return ResponseEntity.ok(turnoService.getTurnosByVeterinarioYFecha(veterinarioId, fecha));
     }
 
     @PostMapping
-    public ResponseEntity<TurnoResponseDTO> createTurno(
-            @Valid @RequestBody TurnoRequestDTO request) {
+    @Operation(summary = "Crear turno", description = "Registra un nuevo turno en la clínica.")
+    @ApiResponse(responseCode = "201", description = "Turno creado correctamente")
+    @ApiResponse(responseCode = "400", description = "Los datos enviados no son válidos")
+    @ApiResponse(responseCode = "409", description = "Ya existe un turno con los datos indicados")
+    public ResponseEntity<TurnoResponseDTO> createTurno(@Valid @RequestBody TurnoRequestDTO request) {
 
         TurnoResponseDTO nuevo = turnoService.createTurno(request);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(nuevo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
     @PatchMapping("/{id}/estado")
-    public ResponseEntity<TurnoResponseDTO> actualizarEstado(
-            @PathVariable Long id,
-            @RequestParam EstadoTurno estado,
-            @RequestParam(required = false) String observaciones) {
-
-        return ResponseEntity.ok(
-                turnoService.actualizarEstado(
-                        id,
-                        estado,
-                        observaciones
-                )
+    @Operation(summary = "Actualizar estado de un turno", description = "Actualiza el estado de un turno existente.")
+    @ApiResponse(responseCode = "200", description = "Turno actualizado correctamente")
+    @ApiResponse(responseCode = "400",description = "Los datos enviados no son válidos")
+    @ApiResponse(responseCode = "404", description = "No se encontró un turno con el ID indicado")
+    public ResponseEntity<TurnoResponseDTO> actualizarEstado(@Parameter(description = "ID del turno", example = "1") @PathVariable Long id, @Parameter(description = "Nuevo estado del turno", example = "CONFIRMADO") @RequestParam EstadoTurno estado, @Parameter(description = "Observaciones adicionales del turno", example = "El paciente se encuentra en buen estado") @RequestParam(required = false) String observaciones) {
+        return ResponseEntity.ok(turnoService.actualizarEstado(id, estado, observaciones)
         );
     }
 }
