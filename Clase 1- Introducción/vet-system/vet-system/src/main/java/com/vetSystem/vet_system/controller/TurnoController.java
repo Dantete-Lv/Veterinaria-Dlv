@@ -1,5 +1,6 @@
 package com.vetSystem.vet_system.controller;
 
+import com.vetSystem.vet_system.dto.MedicamentoResponseDTO;
 import com.vetSystem.vet_system.dto.TurnoRequestDTO;
 import com.vetSystem.vet_system.dto.TurnoResponseDTO;
 import com.vetSystem.vet_system.entity.EstadoTurno;
@@ -40,6 +41,23 @@ public class TurnoController {
 
         return ResponseEntity.ok(turnoService.getTurnoById(id)
         );
+    }
+
+    @GetMapping("/{id}/medicamentos")
+    @Operation(summary = "Obtener medicamentos de un turno", description = "Obtiene los medicamentos asociados al turno indicado.")
+    @ApiResponse(responseCode = "200", description = "Medicamentos obtenidos correctamente")
+    @ApiResponse(responseCode = "404", description = "No se encontró el turno indicado")
+    public ResponseEntity<List<MedicamentoResponseDTO>> getMedicamentosByTurno(@Parameter(description = "ID del turno", example = "1")@PathVariable Long id){
+        return ResponseEntity.ok(turnoService.getMedicamentosByTurno(id));
+    }
+
+    @PostMapping("/{turnoId}/medicamentos/{medicamentoId}")
+    @Operation(summary = "Asociar medicamento a un turno", description = "Asocia un medicamento a un turno y descuenta una unidad de stock")
+    @ApiResponse(responseCode = "200", description = "Medicamento asociado correctamente")
+    @ApiResponse(responseCode = "404", description = "No se encontró el turno o medicamento indicado")
+    @ApiResponse(responseCode = "422", description = "No hay stock disponible del medicamento")
+    public ResponseEntity<MedicamentoResponseDTO> agregarMedicamentoATurno(@Parameter(description = "ID del turno", example = "1")@PathVariable Long turnoId,  @Parameter(description = "ID del medicamento", example = "1") @PathVariable Long medicamentoId){
+        return ResponseEntity.ok(turnoService.agregarMedicamentoATurno(turnoId, medicamentoId));
     }
 
     @GetMapping("/agenda")
