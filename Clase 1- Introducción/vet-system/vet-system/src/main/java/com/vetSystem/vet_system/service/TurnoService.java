@@ -44,8 +44,7 @@ public class TurnoService {
     @Transactional
     public TurnoResponseDTO createTurno(TurnoRequestDTO request) {
         Mascota mascota = mascotaRepository.findById(request.getMascotaId()).orElseThrow(() -> new ResourceNotFoundException("Mascota", request.getMascotaId()));
-        Veterinario veterinario =
-                veterinarioRepository.findById(request.getVeterinarioId()).orElseThrow(() -> new ResourceNotFoundException("Veterinario", request.getVeterinarioId()));
+        Veterinario veterinario = veterinarioRepository.findById(request.getVeterinarioId()).orElseThrow(() -> new ResourceNotFoundException("Veterinario", request.getVeterinarioId()));
         if (turnoRepository.existsByVeterinarioIdAndFechaAndHora(request.getVeterinarioId(), request.getFecha(), request.getHora())) {
             throw new TurnoSuperpuestoException("El veterinario ya tiene un turno en ese horario");
         }

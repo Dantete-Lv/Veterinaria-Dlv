@@ -20,16 +20,11 @@ public class DuenioService {
     private final DuenioMapper duenioMapper;
 
     public List<DuenioDTO> getAllDuenios() {
-        return duenioRepository.findAll()
-                .stream()
-                .map(duenioMapper::toDTO)
-                .collect(Collectors.toList());
+        return duenioRepository.findAll().stream().map(duenioMapper::toDTO).collect(Collectors.toList());
     }
 
     public DuenioDTO getDuenioById(Long id) {
-        Duenio duenio = duenioRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Duenio", id));
+        Duenio duenio = duenioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Duenio", id));
 
         return duenioMapper.toDTO(duenio);
     }
@@ -37,23 +32,18 @@ public class DuenioService {
     public DuenioDTO createDuenio(DuenioDTO dto) {
 
         if (duenioRepository.existsByDni(dto.getDni())) {
-            throw new DuplicateResourceException(
-                    "Ya existe un dueño con DNI: " + dto.getDni()
-            );
+            throw new DuplicateResourceException("Ya existe un dueño con DNI: " + dto.getDni());
         }
 
         Duenio duenio = duenioMapper.toEntity(dto);
 
-        return duenioMapper.toDTO(
-                duenioRepository.save(duenio)
+        return duenioMapper.toDTO(duenioRepository.save(duenio)
         );
     }
 
     public DuenioDTO updateDuenio(Long id, DuenioDTO dto) {
 
-        Duenio duenio = duenioRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Duenio", id));
+        Duenio duenio = duenioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Duenio", id));
 
         duenio.setNombre(dto.getNombre());
         duenio.setApellido(dto.getApellido());
@@ -61,8 +51,7 @@ public class DuenioService {
         duenio.setTelefono(dto.getTelefono());
         duenio.setEmail(dto.getEmail());
 
-        return duenioMapper.toDTO(
-                duenioRepository.save(duenio)
+        return duenioMapper.toDTO(duenioRepository.save(duenio)
         );
     }
 

@@ -30,9 +30,7 @@ public class VeterinarioService {
 
     public VeterinarioDTO createVeterinario(VeterinarioDTO dto){
         if (veterinarioRepository.existsByMatricula(dto.getMatricula())) {
-            throw new DuplicateResourceException(
-                    "Matricula ya registrada: " + dto.getMatricula()
-            );
+            throw new DuplicateResourceException("Matricula ya registrada: " + dto.getMatricula());
         }
         Veterinario vet = veterinarioMapper.toEntity(dto);
         return veterinarioMapper.toDTO(veterinarioRepository.save(vet));
@@ -47,8 +45,7 @@ public class VeterinarioService {
     }
 
     public void deleteVeterinario(Long id){
-        if(!veterinarioRepository.existsById(id))
-            throw new ResourceNotFoundException("Veterinario", id);
+        if(!veterinarioRepository.existsById(id)) throw new ResourceNotFoundException("Veterinario", id);
         veterinarioRepository.deleteById(id);
     }
 
