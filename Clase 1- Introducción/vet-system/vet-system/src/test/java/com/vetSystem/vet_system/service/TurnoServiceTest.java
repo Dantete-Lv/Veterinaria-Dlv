@@ -65,7 +65,7 @@ public class TurnoServiceTest {
 
         when(veterinarioRepository.findById(2L)).thenReturn(Optional.of(veterinario));
 
-        when(turnoRepository.existsByVeterinarioIdAndFechaAndHora(request.getVeterinarioId(), request.getFecha(), request.getHora())).thenReturn(false);
+        when(turnoRepository.findByVeterinarioIdAndFechaAndHora(request.getVeterinarioId(), request.getFecha(), request.getHora())).thenReturn(Optional.empty());
 
         when(turnoRepository.save(any(Turno.class))).thenReturn(turnoGuardado);
 
@@ -95,7 +95,12 @@ public class TurnoServiceTest {
 
         when(veterinarioRepository.findById(2L)).thenReturn(Optional.of(veterinario));
 
-        when(turnoRepository.existsByVeterinarioIdAndFechaAndHora(request.getVeterinarioId(), request.getFecha(), request.getHora())).thenReturn(true);
+        Turno turnoConflicto = new Turno();
+        turnoConflicto.setId(99L);
+        turnoConflicto.setFecha(request.getFecha());
+        turnoConflicto.setHora(request.getHora());
+
+        when(turnoRepository.findByVeterinarioIdAndFechaAndHora(request.getVeterinarioId(), request.getFecha(), request.getHora())).thenReturn(Optional.of(turnoConflicto));
 
         assertThrows(TurnoSuperpuestoException.class, () -> turnoService.createTurno(request));
 

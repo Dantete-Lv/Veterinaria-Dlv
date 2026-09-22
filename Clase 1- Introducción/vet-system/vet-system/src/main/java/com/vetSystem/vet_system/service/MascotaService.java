@@ -1,5 +1,6 @@
 package com.vetSystem.vet_system.service;
 
+import com.vetSystem.vet_system.exception.CupoMascotasException;
 import com.vetSystem.vet_system.exception.ResourceNotFoundException;
 import com.vetSystem.vet_system.entity.Duenio;
 import com.vetSystem.vet_system.entity.Mascota;
@@ -36,9 +37,18 @@ public class MascotaService {
     }
 
     @Transactional
-    public Mascota createMascota(Long duenioId, Mascota mascota){
+    public Mascota createMascota(Long duenioId, Mascota mascota) {
+
         Duenio duenio = duenioRepository.findById(duenioId).orElseThrow(() -> new ResourceNotFoundException("Duenio", duenioId));
+
+        long cantidadMascotas = mascotaRepository.countByDuenioId(duenioId);
+
+        if (cantidadMascotas >= 5) {
+            throw new CupoMascotasException("El dueño ya tiene el máximo de 5 mascotas activas");
+        }
+
         mascota.setDuenio(duenio);
+
         return mascotaRepository.save(mascota);
     }
 
