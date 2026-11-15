@@ -10,5 +10,13 @@ public interface DuenioRepository extends JpaRepository <Duenio, Long> {
 
     boolean existsByDni(String dni);
 
+    boolean existsByNombre(String nombre);
+
+    boolean existsByEmail(String email);
+
     Optional<Duenio> findByEmail(String email);
+
+    Optional<Duenio> findbyNombre(String nombre);
+
+    Optional<Duenio> findByNombreAndApellido(String nombre, String apellido);
 }
