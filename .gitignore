@@ -1,16 +1,39 @@
 ﻿# IntelliJ IDEA
 .idea/
 *.iml
+*.iws
+*.ipr
 
 # Maven
 **/target/
 **/effective-*-pom.xml
 effective-root-pom
+.mvn/wrapper/maven-wrapper.jar
 
-# Logs
+# Java / IDEs
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.apt_generated/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Gradle
+build/
+
+# VS Code
+.vscode/
+
+# Logs y temporales
 *.log
-
-# Archivos temporales
 *.tmp
 *.bak
 
